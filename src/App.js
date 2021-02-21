@@ -47,7 +47,7 @@ function App() {
     <div className="App container">
       <Navi clickme={clicked}/>
       <div className="container">
-        <h3>🔉 List of Issues</h3>
+        <h3>🔉 Please enter exixting userName and repoName to get Issues Page</h3>
       </div>
       {temp.map( (doc, i) => {
         {
