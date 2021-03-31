@@ -1,73 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navi from './components/Navi'
-import Isue from './components/Isue';
-import {useState, useEffect} from 'react';
-import { ThemeProvider } from 'react-bootstrap';
-
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navi from "./components/Navi";
+import Isue from "./components/Isue";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [owner, setOwner] = useState("Neelam-Nishad");
-  const [repo, setRepo] = useState("Neelam-Nishad-weatherApp");
+  const [owner, setOwner] = useState("vercel");
+  const [repo, setRepo] = useState("next.js");
   const [temp, setTemp] = useState([]);
+  const [heading, setHeading] = useState("🔉 List Of Issues.");
 
-  function clicked(){
+  function clicked() {
     const user = document.getElementById("userName").value;
     const repository = document.getElementById("repoName").value;
     setOwner(user);
     setRepo(repository);
   }
-  
 
-  useEffect( () => {
+  useEffect(() => {
     fetch(`https://api.github.com/repos/${owner}/${repo}/issues`)
-    .then(res => res.json())
-    .then(data => {
-      setData(data);
-      console.log(data);
-      console.log(data.length);
-      console.log(data[0].html_url);
-
-      
-    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+        console.log(data);
+      });
   }, [owner, repo]);
 
   const setData = (data) => {
-    setTemp(data);
-  }
-  
-  temp.forEach(element => {
-    console.log(element);
-  });
+    console.log(typeof data + "type of data");
 
-  console.log(temp);
+    try {
+      data.map((ele) => {
+        console.log("in the try block");
+        console.log(ele);
+        setTemp(data);
+      });
+    } catch (e) {
+      setTemp([
+        { title: "❌❌❌❌ERROR❌❌❌❌" },
+        { title: "❌❌❌❌INVALID INPUTS❌❌❌❌" },
+        { title: "❌❌❌❌PLEASE ENTER EXISTING REPO❌❌❌❌" }
+      ]);
+      setHeading("🔉 list of Errors.......");
+    }
+    console.log(temp + "is our new temp");
+  };
 
   return (
     <div className="App container">
-      <Navi clickme={clicked}/>
+      <Navi clickme={clicked} />
       <div className="container">
-        <h3>🔉 Please enter exixting userName and repoName to get Issues Page.</h3>
+        <h3>{heading}</h3>
       </div>
-      {temp.map( (doc, i) => {
-        {
-            console.log(doc.html_url);
-            console.log(doc.name)
-          }
-        return (
-          <Isue links={doc.html_url} name={doc.title}/>
-          
-        )
+      {temp.map((doc, i) => {
+        return <Isue links={doc.html_url} name={doc.title} />;
       })}
     </div>
   );
 }
 
 export default App;
-
-
-
-
 
 // const fetchApi = async () => {
 //   const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
